@@ -1,15 +1,6 @@
 #include "cache.h"
 #include <iostream>
 
-// Cache line structure
-struct Cache::CacheLine{
-    bool valid = false;
-    int tag = 0;
-
-    // LRU, LFU, FIFO
-    int lastUsed = 0, frequency = 0, insertedAt = 0;
-};
-
 // Cache constructor
 Cache::Cache(int cacheSize, int blockSize, int associativity, Cache* next, Memory* memory) 
     : cacheSize(cacheSize), blockSize(blockSize), associativity(associativity), next(next), memory(memory), policy(ReplacementPolicy::FIFO), globalTime(0), hits(0), misses(0)

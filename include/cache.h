@@ -7,7 +7,14 @@
 // Cache simulator
 class Cache{
 private:
-    struct CacheLine;                       // Single cache line
+    // Single cache line
+    struct CacheLine{
+        bool valid = false;
+        int tag = 0;
+
+        // LRU, LFU, FIFO
+        int lastUsed = 0, frequency = 0, insertedAt = 0;
+    };                       
 
     // Cache replacement policies
     enum class ReplacementPolicy{
