@@ -105,6 +105,23 @@ This removes the generated executable.
 
 ---
 
+## Usage (Interactive Commands)
+
+After launching the simulator, the following commands are available:
+
+- `malloc SIZE` — Allocate a memory block
+- `free ID` — Free an allocated block
+- `access ADDRESS` — Access a memory address (cache lookup)
+- `dump` — Display memory layout
+- `stats` — Show memory and cache statistics
+- `set cache POLICY` — Set cache replacement policy (`fifo`, `lru`, `lfu`)
+- `set memory POLICY` — Set memory allocator (`first_fit`, `best_fit`, `worst_fit`)
+- `reinit` — Reinitialize the entire system
+- `help` — Display command help
+- `exit` — Exit the simulator
+
+---
+
 ## Design Overview
 
 - Main memory is modeled as a **contiguous address space**

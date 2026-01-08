@@ -106,7 +106,7 @@ Memory::Memory(int size) : totalMemory(size), nextId(1), lastAllocStart(-1), las
 }
 
 // Set allocation strategy
-bool Memory::setAllocator(std::string& type){
+bool Memory::setAllocator(std::string type){
     if (type == "first_fit") allocator = AllocatorType::FIRST_FIT;
     else if (type == "best_fit") allocator = AllocatorType::BEST_FIT;
     else if (type == "worst_fit") allocator = AllocatorType::WORST_FIT;

@@ -83,7 +83,7 @@ bool Cache::access(int address){
 }
 
 // Set cache replacement policy
-bool Cache::setPolicy(std::string& policyName){
+bool Cache::setPolicy(std::string policyName){
     if (policyName == "fifo") policy = ReplacementPolicy::FIFO;
     else if (policyName == "lru") policy = ReplacementPolicy::LRU;
     else if (policyName == "lfu") policy = ReplacementPolicy::LFU;

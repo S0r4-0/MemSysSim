@@ -38,7 +38,7 @@ private:
 public:
     Memory(int size);                       // Constructor
 
-    bool setAllocator(std::string& type);   // Set allocator type
+    bool setAllocator(std::string type);   // Set allocator type
     int malloc(int size);                   // Allocate memory
     bool free(int id);                      // Free allocation
     bool access(int id);                    // Access check

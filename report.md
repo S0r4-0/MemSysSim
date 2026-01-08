@@ -360,6 +360,19 @@ else if (memory) memory->access(address);
 
 ---
 
+### Address Interpretation Across Cache Levels
+
+Each cache level independently interprets the same byte address using its own
+block size and indexing scheme. The simulator forwards the original byte
+address between cache levels rather than derived block identifiers.
+
+This design models cache *tag lookup behavior* instead of cache line fill
+granularity. As a result, different cache levels may use different block sizes
+without affecting correctness, since each cache only determines whether it
+contains data covering the requested address.
+
+---
+
 ## 6. Statistics and Reporting
 
 ### Memory Statistics
@@ -399,4 +412,116 @@ This system provides:
 - Multi-level cache simulation  
 - Configurable replacement policies  
 - Detailed statistics and reporting  
-  
+
+---
+
+## 9. System Initialization and Configuration
+
+The simulator initializes the entire memory and cache hierarchy at startup based on user-provided parameters, with safe defaults applied when inputs are omitted or invalid.
+
+### Initialization Responsibilities
+
+- Configure main memory size and allocation strategy  
+- Enforce allocator-specific constraints (e.g., buddy allocator requires power-of-two memory size)  
+- Configure the cache hierarchy (L1 and L2 caches)  
+- Validate cache parameters to preserve correct address decoding  
+- Apply default configurations on invalid input to avoid undefined states  
+
+### Design Rationale
+
+- Memory and cache sizes are fixed at initialization to preserve address consistency  
+- Cache parameters are restricted to powers of two to allow clean tag–index–offset decomposition  
+- Partial reconfiguration is intentionally disallowed to maintain memory–cache invariants  
+- Invalid user inputs fall back to defaults to keep the simulator robust and reproducible  
+
+---
+
+### 9.1 Cache Configuration Constraints
+
+Cache parameters must satisfy the following constraints:
+
+- Cache size, block size, and associativity must be strictly positive  
+- Cache size must be divisible by block size  
+- The number of blocks must be divisible by associativity  
+- All cache parameters must be powers of two  
+
+These constraints reflect real hardware requirements and ensure correct address decoding.
+
+---
+
+### Code Reference: Cache Configuration Validation
+
+```cpp
+bool validCacheConfig(int cacheSize, int blockSize, int associativity) {
+    if (cacheSize <= 0 || blockSize <= 0 || associativity <= 0)
+        return false;
+
+    if (cacheSize % blockSize != 0)
+        return false;
+
+    int numBlocks = cacheSize / blockSize;
+    if (numBlocks % associativity != 0)
+        return false;
+
+    if (!isPowerOfTwo(cacheSize) ||
+        !isPowerOfTwo(blockSize) ||
+        !isPowerOfTwo(associativity))
+        return false;
+
+    return true;
+}
+```
+
+---
+
+### 9.2 Buddy Allocator Constraint
+
+When the buddy allocation strategy is selected, the total memory size must be a power of two. This constraint is necessary to preserve correct buddy alignment and enable recursive splitting and merging using XOR-based buddy computation.
+
+If a non-power-of-two memory size is provided while selecting the buddy allocator, the system automatically falls back to a non-buddy allocation strategy to avoid invalid memory states.
+
+```cpp
+if (allocType == "buddy" && !isPowerOfTwo(memSize)) {
+    allocType = "first_fit";
+}
+```
+
+---
+
+## 9.3 Default System Configuration
+
+| Component | Default |
+| --- | --- |
+| Main memory size | 1024 bytes |
+| Allocation strategy | first_fit |
+| L1 cache | 64 B, block size 16 B, 2-way |
+| L2 cache | 256 B, block size 16 B, 4-way |
+| Cache replacement policy | FIFO |
+
+---
+
+### 9.4 Cache Hierarchy Ordering Constraint
+
+The simulator enforces a strict cache hierarchy:
+
+- L1 cache size < L2 cache size < main memory size
+
+This constraint preserves the semantic meaning of a cache hierarchy.
+If violated during initialization, the system reinitializes using default
+parameters instead of attempting partial correction, ensuring all cache
+invariants remain valid.
+
+---
+
+## 10. System Reinitialization
+
+The simulator supports full system reinitialization through a dedicated `reinit` command.
+
+### Reinitialization Semantics
+
+- All memory and cache structures are destroyed  
+- Cache contents and statistics are cleared  
+- The system is reconfigured from scratch using the same initialization flow  
+- Partial reinitialization (memory-only or cache-only) is intentionally not supported  
+
+This behavior is semantically equivalent to restarting the simulator and preserves correctness across memory and cache subsystems.

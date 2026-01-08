@@ -31,7 +31,7 @@ public:
     Cache(int cacheSize, int blockSize, int associativity, Cache* next, Memory* memory);
     
     bool access(int address);                   // Access cache address
-    bool setPolicy(std::string& policyName);    // Set replacement policy
+    bool setPolicy(std::string policyName);    // Set replacement policy
     void invalidateRange(int start, int size);  // Invalidate cache range
     void stats(int level);                      // Print cache stats
 };
