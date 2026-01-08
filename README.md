@@ -39,18 +39,29 @@ The project is designed to be extensible, with scope for adding **virtual memory
 
 ```txt
 MemSysSim/
-├── include/            # Header files
-│   ├── memory.h
-│   └── cache.h
-├── src/                # Source files
-│   ├── memory.cpp
-│   ├── cache.cpp
-│   └── main.cpp
+├── .git/ 
+├── .vscode/ 
+│   ├── c_cpp_properities.json
+│   └── c_cpp_properities.json.sample
 ├── bin/                # Generated executable (ignored by git)
+│   └── memsim.exe
+├── include/            # Header files
+│   ├── cache.h
+│   └── memory.h
+├── src/                # Source files
+│   ├── cache.cpp
+│   ├── main.cpp
+│   └── memory.cpp
+├── tests/              # Sample input-output simulation
+│   └── sample_input_output_workload.txt
+├── Video/              # Video explaning project and test script
+│   └── Demo.mp4
+├──.gitignore
+├── LICENSE
 ├── Makefile
+├── README.md           
 ├── report.md           # Design documentation
-├── report.pdf          # Project report
-└── .gitignore
+└── report.pdf          # Project report
 ```
 
 ---
