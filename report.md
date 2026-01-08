@@ -525,3 +525,48 @@ The simulator supports full system reinitialization through a dedicated `reinit`
 - Partial reinitialization (memory-only or cache-only) is intentionally not supported  
 
 This behavior is semantically equivalent to restarting the simulator and preserves correctness across memory and cache subsystems.
+
+---
+
+## 11. Testing and Validation
+
+The simulator was validated using a comprehensive interactive test workload designed to exercise all major components of the system under realistic usage scenarios.
+
+### Test Methodology
+
+Validation was performed via an interactive command-line session that simulates:
+
+- Memory allocation and deallocation patterns
+- Cache access behavior across multiple cache levels
+- Policy changes during execution
+- Fragmentation behavior for different allocators
+- Full system reinitialization
+
+The workload intentionally includes both valid and invalid configurations to verify error handling and fallback behavior.
+
+### Test Artifacts
+
+A complete input–output transcript of the test workload is provided separately: `tests/sample_input_workload_with_expected_output.txt`
+
+This file serves as:
+
+- The sample input workload
+- Cache and virtual address access log
+- Expected output and correctness reference
+
+Each command in the workload is followed by the observed simulator output, which is used to verify correctness.
+
+### Correctness Criteria
+
+The simulator is considered correct if:
+
+- Allocation success or failure matches allocator constraints
+- Cache hit/miss behavior aligns with the active replacement policy
+- Cache lines overlapping freed memory regions are invalidated
+- Fragmentation statistics reflect allocator-specific behavior
+- Reinitialization restores the system to a clean state
+
+### Notes on Address Semantics
+
+Cache accesses operate on virtual memory addresses within allocated regions.  
+Allocation identifiers are used solely as handles for deallocation and are not treated as memory addresses, except in the case of the buddy allocator where the returned identifier corresponds to the block’s start address.

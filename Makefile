@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -Iinclude
+CXXFLAGS = -std=c++17 -Wall -Wextra -Iinclude
 
 SRC = src/*.cpp
 OUT = bin/memsim.exe

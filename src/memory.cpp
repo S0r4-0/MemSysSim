@@ -153,8 +153,8 @@ bool Memory::free(int id){
 }
 
 // Dummy access validation
-bool Memory::access(int id){
-    id++; id--;                 // Added just to remove warning (or removing warning flag from Makefile)
+bool Memory::access(int address){
+    address++; address--;                 // Added just to remove warning (or removing warning flag from Makefile)
     return true;
 }
 
@@ -168,15 +168,52 @@ bool Memory::getLastAllocation(int& start, int&size){
 
 // Print memory layout
 void Memory::dump(){
-    Block* cur = head;
-    while (cur){
-        std::cout << "[0x" << std::hex << cur->start << " - 0x"
+    if (allocator == AllocatorType::BUDDY){
+        // ---- Allocated blocks ----
+        std::cout << "Allocated blocks:\n";
+        if (buddyAllocated.empty()) {
+            std::cout << "  (none)\n";
+        } else {
+            for (auto& [start, info] : buddyAllocated) {
+                int order = info.first;
+                int req   = info.second;
+                int size  = 1 << order;
+
+                std::cout << "  [0x" << std::hex << start
+                        << " - 0x" << (start + size - 1) << "] "
+                        << "Used (id=" << std::dec << start
+                        << ", order=" << order
+                        << ", req=" << req << ")\n";
+            }
+        }
+
+        // ---- Free lists ----
+        std::cout << "\nFree blocks:\n";
+        for (int order = 0; order <= maxOrder; order++) {
+            int size = 1 << order;
+            std::cout << "Order " << order
+                    << " (" << size << " bytes): ";
+
+            if (freeLists[order].empty()) {
+                std::cout << "(none)";
+            } else {
+                for (int start : freeLists[order]) {
+                    std::cout << "0x" << std::hex << start << " ";
+                }
+            }
+            std::cout << std::dec << '\n';
+        }
+    } else {
+        Block* cur = head;
+        while (cur){
+            std::cout << "[0x" << std::hex << cur->start << " - 0x"
             << (cur->start + cur->size - 1) << "] ";
-        if (cur->free) std::cout << "FREE" << '\n';
-        else std::cout << "Used (id=" << std::dec << cur->id << ")" << '\n';
-        cur = cur->next;
+            if (cur->free) std::cout << "FREE" << '\n';
+            else std::cout << "Used (id=" << std::dec << cur->id << ")" << '\n';
+            cur = cur->next;
+        }
+        std::cout << std::dec;
     }
-    std::cout << std::dec;
 }
 
 // Buddy allocation

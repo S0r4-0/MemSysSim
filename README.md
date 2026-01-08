@@ -60,7 +60,7 @@ MemSysSim/
 ### Requirements
 
 - GNU Make
-- `g++` (C++14 compatible)
+- `g++` (C++17 compatible)
 - Windows (PowerShell / CMD) **or** Unix-like environment (Linux / MSYS2 / Git Bash)
 
 ---
@@ -131,6 +131,64 @@ After launching the simulator, the following commands are available:
 - Cache lines are invalidated when underlying memory regions are freed
 
 Detailed design explanations are available in `report.md`.
+
+---
+
+## Test Artifacts & Validation
+
+This project includes a comprehensive interactive test workload that serves as the primary validation artifact for the simulator.
+
+### Sample Input Workload
+
+A complete end-to-end simulation transcript is provided, covering initialization, memory allocation, cache access, policy changes, and system reinitialization.
+
+**File:** -> `tests/sample_input_workload_with_expected_output.txt`
+
+### Purpose
+
+- Simulates realistic memory allocation patterns
+- Logs cache accesses using valid virtual addresses
+- Demonstrates cache hit/miss behavior across multiple cache policies
+- Exercises allocator edge cases and fragmentation scenarios
+- Acts as a correctness reference via observed outputs
+
+### Coverage
+
+The sample workload exercises:
+
+- Memory allocation strategies:
+  - First Fit
+  - Best Fit
+  - Worst Fit
+  - Buddy allocation
+- Cache replacement policies:
+  - FIFO
+  - LRU
+  - LFU
+- Invalid and valid initialization scenarios
+- Cache invalidation on memory deallocation
+- Internal and external fragmentation behavior
+- Full system reinitialization flows
+
+### Expected Output / Correctness Criteria
+
+- Successful and failed allocations match allocator constraints
+- Cache hit/miss behavior is consistent with the active replacement policy
+- Cache lines overlapping freed memory regions are invalidated
+- Fragmentation statistics reflect allocator-specific behavior
+- Reinitialization resets memory and cache state correctly
+
+### Notes
+
+- The workload is fully reproducible using the interactive CLI.
+- Automated replay scripts may be added in future revisions.
+
+---
+
+### Demonstration Video
+
+For convenience, a short demonstration video is also included under `Video/ folder` that shows how to run the simulator using the provided test workload/script and interpret the output.  
+The video walks through the execution flow, highlights key commands, and explains how the observed behavior corresponds to the expected correctness criteria.
 
 ---
 

@@ -1,0 +1,576 @@
+make run
+if not exist bin mkdir bin
+g++ -std=c++14 -Wall -Wextra -Iinclude src/*.cpp -o bin/memsim.exe
+./bin/memsim.exe
+Enter main memory size [1024]: 1000
+Enter allocator (first_fit / best_fit / worst_fit / buddy) [first_fit]: buddy
+Buddy allocator requires power-of-two memory size
+Falling back to first_fit
+
+Note:
+Cache configuration rules:
+  - cache size, block size, and associativity must be > 0
+  - cache size must be divisible by block size
+  - (cache size / block size) must be divisible by associativity
+  - all values must be powers of two
+
+--- L2 Cache Configuration ---
+L2 cache size [256]: 250
+L2 block size [16]: 20
+L2 associativity [4]: 3
+
+--- L1 Cache Configuration ---
+L1 cache size [64]: 0
+L1 block size [16]: 7
+L1 associativity [2]: 1
+Invalid L2 cache configuration. Using defaults.
+Invalid L1 cache configuration. Using defaults.
+Enter cache policy (fifo / lru / lfu) [fifo]: 
+
+System initialized.
+Type 'help' to see available commands.
+> malloc -50
+Size must be positive
+> malloc 100
+Allocated block id = 1
+> access 50
+Cache miss
+> access 50
+Cache hit
+> access 300
+Cache miss
+> access 50
+Cache hit
+> stats
+==== Memory Statistics ====
+Total memory           : 1000
+Used memory            : 100
+Free memory            : 900
+Memory Utilization     : 0.1
+Internal fragmentation : 0
+External fragmentation : 0
+Total allocations      : 1
+Successful allocations : 1
+Failed allocations     : 0
+Success rate           : 1
+Failed rate            : 0
+==== Cache L1 Statistics ===
+Hits          : 2
+Misses        : 2
+Hit Ratio     : 0.5
+Misses propagated to L2 : 2
+==== Cache L2 Statistics ===
+Hits          : 0
+Misses        : 2
+Hit Ratio     : 0
+Misses propagated to Memory : 2
+> set cache lru
+Cache policy set to lru
+> set memory buddy
+Buddy allocator can only be set at startup
+> free 999
+Invalid block id
+> free 1
+Block 1 freed
+> dump
+[0x0 - 0x3e7] FREE
+> reinit
+Reinitializing system...
+Enter main memory size [1024]: 256
+Enter allocator (first_fit / best_fit / worst_fit / buddy) [first_fit]: 
+
+Note:
+Cache configuration rules:
+  - cache size, block size, and associativity must be > 0
+  - cache size must be divisible by block size
+  - (cache size / block size) must be divisible by associativity
+  - all values must be powers of two
+
+--- L2 Cache Configuration ---
+L2 cache size [256]: 512
+L2 block size [16]: 16
+L2 associativity [4]:  
+
+--- L1 Cache Configuration ---
+L1 cache size [64]:
+L1 block size [16]: 
+L1 associativity [2]: 
+Invalid cache hierarchy ordering.
+Requirement: L1 size < L2 size < Main memory size.
+Please re-enter configuration.
+
+Enter main memory size [1024]: 4096
+Enter allocator (first_fit / best_fit / worst_fit / buddy) [first_fit]: best_fit
+
+Note:
+Cache configuration rules:
+  - cache size, block size, and associativity must be > 0
+  - cache size must be divisible by block size
+  - (cache size / block size) must be divisible by associativity
+  - all values must be powers of two
+
+--- L2 Cache Configuration ---
+L2 cache size [256]: 1024
+L2 block size [16]: 16
+L2 associativity [4]: 4
+
+--- L1 Cache Configuration ---
+L1 cache size [64]:
+L1 block size [16]: 
+L1 associativity [2]: 
+Enter cache policy (fifo / lru / lfu) [fifo]: 
+
+System initialized.
+> set cache policy yz
+Invalid cache policy
+> help      
+Available commands:
+  malloc SIZE              Allocate memory block
+  free ID                  Free allocated block
+  access ADDRESS           Access memory address (cache lookup)
+  dump                     Dump memory layout
+  stats                    Show memory and cache statistics
+  set cache POLICY         Change cache replacement policy
+  set memory POLICY        Change memory allocation strategy
+  reinit                   Reinitialize system (full restart)
+  exit                     Exit simulator
+
+Memory allocation policies:
+  first_fit
+  best_fit
+  worst_fit
+  buddy        (startup only)
+
+Cache replacement policies:
+  fifo
+  lru
+  lfu
+> set cache xyz
+Invalid cache policy
+> set cache fifo
+Cache policy set to fifo
+> reinit
+Reinitializing system...
+Enter main memory size [1024]: 2048
+Enter allocator (first_fit / best_fit / worst_fit / buddy) [first_fit]: 
+
+Note:
+Cache configuration rules:
+  - cache size, block size, and associativity must be > 0
+  - cache size must be divisible by block size
+  - (cache size / block size) must be divisible by associativity
+  - all values must be powers of two
+
+--- L2 Cache Configuration ---
+L2 cache size [256]: 512
+L2 block size [16]: 
+L2 associativity [4]: 
+
+--- L1 Cache Configuration ---
+L1 cache size [64]: 128
+L1 block size [16]: 
+L1 associativity [2]: 
+Enter cache policy (fifo / lru / lfu) [fifo]:    
+
+System initialized.
+> hep
+Unknown command
+> help
+Available commands:
+  malloc SIZE              Allocate memory block
+  free ID                  Free allocated block
+  access ADDRESS           Access memory address (cache lookup)
+  dump                     Dump memory layout
+  stats                    Show memory and cache statistics
+  set cache POLICY         Change cache replacement policy
+  set memory POLICY        Change memory allocation strategy
+  reinit                   Reinitialize system (full restart)
+  exit                     Exit simulator
+
+Memory allocation policies:
+  first_fit
+  best_fit
+  worst_fit
+  buddy        (startup only)
+
+Cache replacement policies:
+  fifo
+  lru
+  lfu
+> malloc 100
+Allocated block id = 1
+> malloc 200
+Allocated block id = 2
+> malloc 300
+Allocated block id = 3
+> access 50
+Cache miss
+> access 180
+Cache miss
+> access 50
+Cache hit
+> access 400
+Cache miss
+> access 50
+Cache hit
+> access 180
+Cache hit
+> access 530
+Cache miss
+> dump
+[0x0 - 0x63] Used (id=1)
+[0x64 - 0x12b] Used (id=2)
+[0x12c - 0x257] Used (id=3)
+[0x258 - 0x7ff] FREE
+> stats
+==== Memory Statistics ====
+Total memory           : 2048
+Used memory            : 600
+Free memory            : 1448
+Memory Utilization     : 0.292969
+Internal fragmentation : 0
+External fragmentation : 0
+Total allocations      : 3
+Successful allocations : 3
+Failed allocations     : 0
+Success rate           : 1
+Failed rate            : 0
+==== Cache L1 Statistics ===
+Hits          : 3
+Misses        : 4
+Hit Ratio     : 0.428571
+Misses propagated to L2 : 4
+==== Cache L2 Statistics ===
+Hits          : 0
+Misses        : 4
+Hit Ratio     : 0
+Misses propagated to Memory : 4
+> set cache lru
+Cache policy set to lru
+> access 50
+Cache hit
+> access 180
+Cache hit
+> access 600
+Cache miss
+> access 700
+Cache miss
+> access 59
+Cache miss
+> access 50
+Cache hit
+> free 2
+Block 2 freed
+> dump
+[0x0 - 0x63] Used (id=1)
+[0x64 - 0x12b] FREE
+[0x12c - 0x257] Used (id=3)
+[0x258 - 0x7ff] FREE
+> malloc 150
+Allocated block id = 4
+> dump
+[0x0 - 0x63] Used (id=1)
+[0x64 - 0xf9] Used (id=4)
+[0xfa - 0x12b] FREE
+[0x12c - 0x257] Used (id=3)
+[0x258 - 0x7ff] FREE
+> stats
+==== Memory Statistics ====
+Total memory           : 2048
+Used memory            : 550
+Free memory            : 1498
+Memory Utilization     : 0.268555
+Internal fragmentation : 0
+External fragmentation : 0.0333778
+Total allocations      : 4
+Successful allocations : 4
+Failed allocations     : 0
+Success rate           : 1
+Failed rate            : 0
+==== Cache L1 Statistics ===
+Hits          : 6
+Misses        : 7
+Hit Ratio     : 0.461538
+Misses propagated to L2 : 7
+==== Cache L2 Statistics ===
+Hits          : 1
+Misses        : 6
+Hit Ratio     : 0.142857
+Misses propagated to Memory : 6
+> reinit
+Reinitializing system...
+Enter main memory size [1024]: 
+Enter allocator (first_fit / best_fit / worst_fit / buddy) [first_fit]: buddy
+
+Note:
+Cache configuration rules:
+  - cache size, block size, and associativity must be > 0
+  - cache size must be divisible by block size
+  - (cache size / block size) must be divisible by associativity
+  - all values must be powers of two
+
+--- L2 Cache Configuration ---
+L2 cache size [256]: 256
+L2 block size [16]: 16
+L2 associativity [4]: 4
+
+--- L1 Cache Configuration ---
+L1 cache size [64]:
+L1 block size [16]: 
+L1 associativity [2]: 
+Enter cache policy (fifo / lru / lfu) [fifo]: lfu
+
+System initialized.
+Type 'help' to see available commands.
+> help
+Available commands:
+  malloc SIZE              Allocate memory block
+  free ID                  Free allocated block
+  access ADDRESS           Access memory address (cache lookup)
+  dump                     Dump memory layout
+  stats                    Show memory and cache statistics
+  set cache POLICY         Change cache replacement policy
+  set memory POLICY        Change memory allocation strategy
+  reinit                   Reinitialize system (full restart)
+  exit                     Exit simulator
+
+Memory allocation policies:
+  first_fit
+  best_fit
+  worst_fit
+  buddy        (startup only)
+
+Cache replacement policies:
+  fifo
+  lru
+  lfu
+> 100
+Unknown command
+> malloc 100
+Allocated block id = 0
+> malloc 200
+Allocated block id = 256
+> malloc 300
+Allocated block id = 512
+> stats
+==== Memory Statistics ====
+Total memory           : 1024
+Used memory            : 896
+Free memory            : 128
+Memory Utilization     : 0.875
+Internal fragmentation : 0.330357
+External fragmentation : 0
+Total allocations      : 3
+Successful allocations : 3
+Failed allocations     : 0
+Success rate           : 1
+Failed rate            : 0
+==== Cache L1 Statistics ===
+Hits          : 0
+Misses        : 0
+Hit Ratio     : 0
+Misses propagated to L2 : 0
+==== Cache L2 Statistics ===
+Hits          : 0
+Misses        : 0
+Hit Ratio     : 0
+Misses propagated to Memory : 0
+> dump
+Allocated blocks:
+  [0x200 - 0x3ff] Used (id=512, order=9, req=300)
+  [0x100 - 0x1ff] Used (id=256, order=8, req=200)
+  [0x0 - 0x7f] Used (id=0, order=7, req=100)
+
+Free blocks:
+Order 0 (1 bytes): (none)
+Order 1 (2 bytes): (none)
+Order 2 (4 bytes): (none)
+Order 3 (8 bytes): (none)
+Order 4 (16 bytes): (none)
+Order 5 (32 bytes): (none)
+Order 6 (64 bytes): (none)
+Order 7 (128 bytes): 0x80 
+Order 8 (256 bytes): (none)
+Order 9 (512 bytes): (none)
+Order 10 (1024 bytes): (none)
+> free 255
+Invalid block id
+> free 256
+Block 256 freed
+> free 0
+Block 0 freed
+> stats
+==== Memory Statistics ====
+Total memory           : 1024
+Used memory            : 512
+Free memory            : 512
+Memory Utilization     : 0.5
+Internal fragmentation : 0.414062
+External fragmentation : 0
+Total allocations      : 3
+Successful allocations : 3
+Failed allocations     : 0
+Success rate           : 1
+Failed rate            : 0
+==== Cache L1 Statistics ===
+Hits          : 0
+Misses        : 0
+Hit Ratio     : 0
+Misses propagated to L2 : 0
+==== Cache L2 Statistics ===
+Hits          : 0
+Misses        : 0
+Hit Ratio     : 0
+Misses propagated to Memory : 0
+> dump
+Allocated blocks:
+  [0x200 - 0x3ff] Used (id=512, order=9, req=300)
+
+Free blocks:
+Order 0 (1 bytes): (none)
+Order 1 (2 bytes): (none)
+Order 2 (4 bytes): (none)
+Order 3 (8 bytes): (none)
+Order 4 (16 bytes): (none)
+Order 5 (32 bytes): (none)
+Order 6 (64 bytes): (none)
+Order 7 (128 bytes): (none)
+Order 8 (256 bytes): (none)
+Order 9 (512 bytes): 0x0
+Order 10 (1024 bytes): (none)
+> reinit
+Reinitializing system...
+Enter main memory size [1024]: 
+Enter allocator (first_fit / best_fit / worst_fit / buddy) [first_fit]: buddy
+
+Note:
+Cache configuration rules:
+  - cache size, block size, and associativity must be > 0
+  - cache size must be divisible by block size
+  - (cache size / block size) must be divisible by associativity
+  - all values must be powers of two
+
+--- L2 Cache Configuration ---
+L2 cache size [256]: 
+L2 block size [16]: 
+L2 associativity [4]: 
+
+--- L1 Cache Configuration ---
+L1 cache size [64]:
+L1 block size [16]: 
+L1 associativity [2]: 
+Enter cache policy (fifo / lru / lfu) [fifo]: 
+
+System initialized.
+Type 'help' to see available commands.
+> malloc 256
+Allocated block id = 0
+> malloc 128
+Allocated block id = 256
+> malloc 128
+Allocated block id = 384
+> malloc 256
+Allocated block id = 512
+> dump
+Allocated blocks:
+  [0x200 - 0x2ff] Used (id=512, order=8, req=256)
+  [0x180 - 0x1ff] Used (id=384, order=7, req=128)
+  [0x100 - 0x17f] Used (id=256, order=7, req=128)
+  [0x0 - 0xff] Used (id=0, order=8, req=256)
+
+Free blocks:
+Order 0 (1 bytes): (none)
+Order 1 (2 bytes): (none)
+Order 2 (4 bytes): (none)
+Order 3 (8 bytes): (none)
+Order 4 (16 bytes): (none)
+Order 5 (32 bytes): (none)
+Order 6 (64 bytes): (none)
+Order 7 (128 bytes): (none)
+Order 8 (256 bytes): 0x300
+Order 9 (512 bytes): (none)
+Order 10 (1024 bytes): (none)
+> free 256
+Block 256 freed
+> free 384
+Block 384 freed
+> dump
+Allocated blocks:
+  [0x200 - 0x2ff] Used (id=512, order=8, req=256)
+  [0x0 - 0xff] Used (id=0, order=8, req=256)
+
+Free blocks:
+Order 0 (1 bytes): (none)
+Order 1 (2 bytes): (none)
+Order 2 (4 bytes): (none)
+Order 3 (8 bytes): (none)
+Order 4 (16 bytes): (none)
+Order 5 (32 bytes): (none)
+Order 6 (64 bytes): (none)
+Order 7 (128 bytes): (none)
+Order 8 (256 bytes): 0x300 0x100
+Order 9 (512 bytes): (none)
+Order 10 (1024 bytes): (none)
+> malloc 512
+Allocation failed
+> dump
+Allocated blocks:
+  [0x200 - 0x2ff] Used (id=512, order=8, req=256)
+  [0x0 - 0xff] Used (id=0, order=8, req=256)
+
+Free blocks:
+Order 0 (1 bytes): (none)
+Order 1 (2 bytes): (none)
+Order 2 (4 bytes): (none)
+Order 3 (8 bytes): (none)
+Order 4 (16 bytes): (none)
+Order 5 (32 bytes): (none)
+Order 6 (64 bytes): (none)
+Order 7 (128 bytes): (none)
+Order 8 (256 bytes): 0x300 0x100
+Order 9 (512 bytes): (none)
+Order 10 (1024 bytes): (none)
+> stats
+==== Memory Statistics ====
+Total memory           : 1024
+Used memory            : 512
+Free memory            : 512
+Memory Utilization     : 0.5
+Internal fragmentation : 0
+External fragmentation : 0.5
+Total allocations      : 5
+Successful allocations : 4
+Failed allocations     : 1
+Success rate           : 0.8
+Failed rate            : 0.2
+==== Cache L1 Statistics ===
+Hits          : 0
+Misses        : 0
+Hit Ratio     : 0
+Misses propagated to L2 : 0
+==== Cache L2 Statistics ===
+Hits          : 0
+Misses        : 0
+Hit Ratio     : 0
+Misses propagated to Memory : 0
+> malloc 256
+Allocated block id = 256
+> dump
+Allocated blocks:
+  [0x100 - 0x1ff] Used (id=256, order=8, req=256)
+  [0x200 - 0x2ff] Used (id=512, order=8, req=256)
+  [0x0 - 0xff] Used (id=0, order=8, req=256)
+
+Free blocks:
+Order 0 (1 bytes): (none)
+Order 1 (2 bytes): (none)
+Order 2 (4 bytes): (none)
+Order 3 (8 bytes): (none)
+Order 4 (16 bytes): (none)
+Order 5 (32 bytes): (none)
+Order 6 (64 bytes): (none)
+Order 7 (128 bytes): (none)
+Order 8 (256 bytes): 0x300
+Order 9 (512 bytes): (none)
+Order 10 (1024 bytes): (none)
+> exit
