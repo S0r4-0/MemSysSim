@@ -47,7 +47,7 @@ MemSysSim/
 │   └── memsim.exe
 ├── include/            # Header files
 │   ├── cache.h
-│   └── memory.h
+│   └── memsys.h
 ├── src/                # Source files
 │   ├── cache.cpp
 │   ├── main.cpp
@@ -205,7 +205,7 @@ The video walks through the execution flow, highlights key commands, and explain
 
 ### VS Code IntelliSense Configuration (Red Squiggles Fix)
 
-When using VS Code, you may see red squiggles under `#include "memory.h"` or `#include "cache.h"` even though the project compiles correctly using the Makefile.  
+When using VS Code, you may see red squiggles under `#include "memsys.h"` or `#include "cache.h"` even though the project compiles correctly using the Makefile.  
 This happens because the Makefile specifies the `include/` directory during compilation, but VS Code’s IntelliSense does not automatically pick up compiler include paths.
 
 #### How to Fix

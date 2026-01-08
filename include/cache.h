@@ -2,7 +2,7 @@
 #define CACHE_H
 
 #include <vector>
-#include "memory.h"
+#include "memsys.h"
 
 // Cache simulator
 class Cache{

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "memory.h"
+#include "memsys.h"
 #include "cache.h"
 
 // -------- Helpers --------
