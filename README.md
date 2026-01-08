@@ -3,6 +3,8 @@
 MemSysSim is a modular C++ simulator for studying **memory allocation strategies**, **cache hierarchies**, and **memory system behavior** in operating systems.  
 The project is designed to be extensible, with scope for adding **virtual memory** components in the future.
 
+[Video](https://drive.google.com/drive/folders/1FXQTaAY828N7yhmAFxWPoHtg8bxNMP4m?usp=sharing)
+
 ---
 
 ## Features
@@ -54,8 +56,6 @@ MemSysSim/
 │   └── memory.cpp
 ├── tests/              # Sample input-output simulation
 │   └── sample_input_output_workload.txt
-├── Video/              # Video explaning project and test script
-│   └── Demo.mp4
 ├──.gitignore
 ├── LICENSE
 ├── Makefile
@@ -198,7 +198,9 @@ The sample workload exercises:
 
 ### Demonstration Video
 
-For convenience, a short demonstration video is also included under `Video/ folder` that shows how to run the simulator using the provided test workload/script and interpret the output.  
+[Video](https://drive.google.com/drive/folders/1FXQTaAY828N7yhmAFxWPoHtg8bxNMP4m?usp=sharing)
+
+For convenience, a short demonstration video is also included that shows how to run the simulator using the provided test workload/script and interpret the output.  
 The video walks through the execution flow, highlights key commands, and explains how the observed behavior corresponds to the expected correctness criteria.
 
 ---
